@@ -117,7 +117,7 @@ app.post('/api/chat/groq', async (req, res) => {
     setStreamingHeaders(res);
 
     const stream = await groq.chat.completions.create({
-      model: 'gemma2-9b-it',
+      model: 'llama-3.3-70b-versatile',
       messages: [{ role: 'system', content: buildSystemPrompt(language) }, ...messages],
       stream: true,
     });
