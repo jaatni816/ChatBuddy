@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <!-- Main page -->
+  <url>
+    <loc>http://localhost:3000/</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="http://localhost:3000/?lang=hi"/>
+    <xhtml:link rel="alternate" hreflang="hi-Latn" href="http://localhost:3000/?lang=hinglish"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="http://localhost:3000/?lang=punjabi"/>
+    <xhtml:link rel="alternate" hreflang="bn" href="http://localhost:3000/?lang=bengali"/>
+    <xhtml:link rel="alternate" hreflang="mr" href="http://localhost:3000/?lang=marathi"/>
+    <xhtml:link rel="alternate" hreflang="gu" href="http://localhost:3000/?lang=gujarati"/>
+    <xhtml:link rel="alternate" hreflang="ta" href="http://localhost:3000/?lang=tamil"/>
+    <xhtml:link rel="alternate" hreflang="te" href="http://localhost:3000/?lang=telugu"/>
+    <xhtml:link rel="alternate" hreflang="kn" href="http://localhost:3000/?lang=kannada"/>
+    <xhtml:link rel="alternate" hreflang="ml" href="http://localhost:3000/?lang=malayalam"/>
+    <xhtml:link rel="alternate" hreflang="ur" href="http://localhost:3000/?lang=urdu"/>
+    <xhtml:link rel="alternate" hreflang="es" href="http://localhost:3000/?lang=spanish"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="http://localhost:3000/?lang=french"/>
+    <xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/?lang=german"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="http://localhost:3000/?lang=arabic"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="http://localhost:3000/?lang=japanese"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="http://localhost:3000/?lang=korean"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="http://localhost:3000/?lang=chinese"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="http://localhost:3000/?lang=russian"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/"/>
+  </url>
+  
+  <!-- Privacy Policy (placeholder - create when needed) -->
+  <!--
+  <url>
+    <loc>http://localhost:3000/privacy</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  -->
+  
+  <!-- Terms of Service (placeholder - create when needed) -->
+  <!--
+  <url>
+    <loc>http://localhost:3000/terms</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  -->
+
+</urlset>

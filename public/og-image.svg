@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f1115;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#171a21;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1f222a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  
+  <!-- Decorative elements -->
+  <circle cx="100" cy="100" r="80" fill="url(#accentGrad)" opacity="0.1" filter="url(#glow)"/>
+  <circle cx="1100" cy="530" r="120" fill="url(#accentGrad)" opacity="0.08" filter="url(#glow)"/>
+  <circle cx="1150" cy="80" r="60" fill="#3b82f6" opacity="0.15"/>
+  
+  <!-- Chat bubbles decoration -->
+  <g opacity="0.15">
+    <path d="M150 200 L250 200 Q270 200 270 220 L270 280 Q270 300 250 300 L150 300 Q130 300 130 280 L130 220 Q130 200 150 200 Z" fill="#3b82f6"/>
+    <path d="M155 210 L245 210 Q260 210 260 225 L260 275 Q260 290 245 290 L155 290 Q140 290 140 275 L140 225 Q140 210 155 210 Z" fill="#1f222a"/>
+    <text x="200" y="255" font-family="system-ui, sans-serif" font-size="16" fill="#94a3b8" text-anchor="middle">Chat</text>
+    <path d="M950 350 L1050 350 Q1070 350 1070 370 L1070 430 Q1070 450 1050 450 L950 450 Q930 450 930 430 L930 370 Q930 350 950 350 Z" fill="#8b5cf6" transform="rotate(-5, 1000, 400)"/>
+    <path d="M955 360 L1045 360 Q1055 360 1055 375 L1055 425 Q1055 440 1045 440 L955 440 Q940 440 940 425 L940 375 Q940 360 955 360 Z" fill="#1f222a" transform="rotate(-5, 1000, 400)"/>
+    <text x="1000" y="400" font-family="system-ui, sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle" transform="rotate(-5, 1000, 400)">AI</text>
+  </g>
+  
+  <!-- Main content -->
+  <g transform="translate(600, 280)">
+    <!-- Logo -->
+    <circle r="60" fill="url(#accentGrad)" filter="url(#glow)"/>
+    <text x="0" y="18" font-family="system-ui, sans-serif" font-size="48" font-weight="bold" fill="white" text-anchor="middle" dominant-baseline="middle">💬</text>
+    
+    <!-- App Name -->
+    <text x="0" y="100" font-family="system-ui, sans-serif" font-size="48" font-weight="700" fill="white" text-anchor="middle" letter-spacing="-1">ChatBuddy</text>
+    
+    <!-- Tagline -->
+    <text x="0" y="150" font-family="system-ui, sans-serif" font-size="22" fill="#94a3b8" text-anchor="middle">Free AI Chat Assistant</text>
+    
+    <!-- Language badges -->
+    <g transform="translate(0, 200)">
+      <text x="-280" y="0" font-family="system-ui, sans-serif" font-size="16" fill="#3b82f6" text-anchor="end" font-weight="600">22+ Languages</text>
+      <text x="0" y="0" font-family="system-ui, sans-serif" font-size="16" fill="white" text-anchor="middle" font-weight="600">Hindi • English • Hinglish</text>
+      <text x="280" y="0" font-family="system-ui, sans-serif" font-size="16" fill="#8b5cf6" text-anchor="start" font-weight="600">Punjabi • Bengali • Tamil</text>
+    </g>
+    
+    <!-- Features -->
+    <g transform="translate(0, 260)">
+      <text x="-200" y="0" font-family="system-ui, sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">✓ No Login Required</text>
+      <text x="0" y="0" font-family="system-ui, sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">✓ Streaming Responses</text>
+      <text x="200" y="0" font-family="system-ui, sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">✓ Markdown & Code</text>
+    </g>
+    
+    <!-- CTA -->
+    <g transform="translate(0, 330)">
+      <rect x="-140" y="-25" width="280" height="50" rx="25" fill="url(#accentGrad)" filter="url(#glow)"/>
+      <text x="0" y="7" font-family="system-ui, sans-serif" font-size="18" font-weight="600" fill="white" text-anchor="middle" dominant-baseline="middle">Start Chatting Free</text>
+    </g>
+  </g>
+  
+  <!-- Powered by -->
+  <text x="600" y="580" font-family="system-ui, sans-serif" font-size="14" fill="#4b5563" text-anchor="middle">Powered by Groq (Llama 3.3) & Google Gemini</text>
+</svg>

@@ -1,0 +1,13 @@
+# ChatBuddy - robots.txt
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: http://localhost:3000/sitemap.xml
+
+# Disallow private/admin paths (none currently)
+# Disallow: /api/
+# Disallow: /private/
+
+# Crawl-delay (optional, be respectful)
+Crawl-delay: 10

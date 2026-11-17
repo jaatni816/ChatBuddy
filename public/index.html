@@ -1,18 +1,144 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MyGPT - AI Assistant</title>
+  
+  <!-- Primary Meta Tags -->
+  <title>ChatBuddy - Free AI Chat Assistant | Hindi, English & 20+ Languages</title>
+  <meta name="title" content="ChatBuddy - Free AI Chat Assistant | Hindi, English & 20+ Languages">
+  <meta name="description" content="ChatBuddy: Free AI chat assistant powered by Groq & Google Gemini. Chat in Hindi, English, Hinglish, Punjabi, Bengali, Tamil, Telugu & 20+ languages. No login required.">
+  <meta name="keywords" content="AI chat assistant, free AI chat, ChatGPT alternative, Groq AI, Google Gemini, multilingual chat, Hindi AI chat, Hinglish chat, Punjabi chat, Bengali chat, Tamil chat, Telugu chat, no login AI">
+  <meta name="author" content="ChatBuddy">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#3b82f6">
+  <meta name="color-scheme" content="dark light">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="http://localhost:3000/">
+  
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  
+  <!-- Preconnect for fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Sans+Arabic&family=Noto+Sans+Bengali&family=Noto+Sans+Devanagari&family=Noto+Sans+Gujarati&family=Noto+Sans+Gurmukhi&family=Noto+Sans+Kannada&family=Noto+Sans+Malayalam&family=Noto+Sans+Oriya&family=Noto+Sans+Tamil&family=Noto+Sans+Telugu&family=Noto+Sans+Thaana&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://localhost:3000/">
+  <meta property="og:title" content="ChatBuddy - Free AI Chat Assistant | Hindi, English & 20+ Languages">
+  <meta property="og:description" content="ChatBuddy: Free AI chat assistant powered by Groq & Google Gemini. Chat in Hindi, English, Hinglish, Punjabi, Bengali, Tamil, Telugu & 20+ languages. No login required.">
+  <meta property="og:image" content="http://localhost:3000/og-image.svg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ChatBuddy AI Chat Assistant Interface">
+  <meta property="og:site_name" content="ChatBuddy">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="hi_IN">
+  <meta property="og:locale:alternate" content="en_GB">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="http://localhost:3000/">
+  <meta name="twitter:title" content="ChatBuddy - Free AI Chat Assistant | Hindi, English & 20+ Languages">
+  <meta name="twitter:description" content="ChatBuddy: Free AI chat assistant powered by Groq & Google Gemini. Chat in Hindi, English, Hinglish, Punjabi, Bengali, Tamil, Telugu & 20+ languages. No login required.">
+  <meta name="twitter:image" content="http://localhost:3000/og-image.svg">
+  <meta name="twitter:image:alt" content="ChatBuddy AI Chat Assistant Interface">
+  
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ChatBuddy",
+    "description": "Free AI chat assistant powered by Groq & Google Gemini. Chat in Hindi, English, Hinglish, Punjabi, Bengali, Tamil, Telugu & 20+ languages. No login required.",
+    "url": "http://localhost:3000/",
+    "applicationCategory": "CommunicationsApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    },
+    "featureList": [
+      "Free AI Chat",
+      "Multi-language Support (22+ languages)",
+      "Groq & Google Gemini Models",
+      "Streaming Responses",
+      "Conversation History",
+      "Markdown & Code Blocks",
+      "No Login Required",
+      "Mobile Responsive",
+      "Dark Theme"
+    ],
+    "inLanguage": ["en", "hi", "hi-Latn", "pa", "bn", "mr", "gu", "ta", "te", "kn", "ml", "ur", "es", "fr", "de", "ar", "ja", "ko", "zh", "ru"],
+    "author": {
+      "@type": "Person",
+      "name": "ChatBuddy"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ChatBuddy",
+      "url": "http://localhost:3000/"
+    }
+  }
+  </script>
+  
+  <!-- JSON-LD Breadcrumb -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "http://localhost:3000/"
+    }]
+  }
+  </script>
+  
+  <!-- Hreflang for multilingual support -->
+  <link rel="alternate" hreflang="en" href="http://localhost:3000/">
+  <link rel="alternate" hreflang="hi" href="http://localhost:3000/?lang=hi">
+  <link rel="alternate" hreflang="hi-Latn" href="http://localhost:3000/?lang=hinglish">
+  <link rel="alternate" hreflang="pa" href="http://localhost:3000/?lang=punjabi">
+  <link rel="alternate" hreflang="bn" href="http://localhost:3000/?lang=bengali">
+  <link rel="alternate" hreflang="mr" href="http://localhost:3000/?lang=marathi">
+  <link rel="alternate" hreflang="gu" href="http://localhost:3000/?lang=gujarati">
+  <link rel="alternate" hreflang="ta" href="http://localhost:3000/?lang=tamil">
+  <link rel="alternate" hreflang="te" href="http://localhost:3000/?lang=telugu">
+  <link rel="alternate" hreflang="kn" href="http://localhost:3000/?lang=kannada">
+  <link rel="alternate" hreflang="ml" href="http://localhost:3000/?lang=malayalam">
+  <link rel="alternate" hreflang="ur" href="http://localhost:3000/?lang=urdu">
+  <link rel="alternate" hreflang="es" href="http://localhost:3000/?lang=spanish">
+  <link rel="alternate" hreflang="fr" href="http://localhost:3000/?lang=french">
+  <link rel="alternate" hreflang="de" href="http://localhost:3000/?lang=german">
+  <link rel="alternate" hreflang="ar" href="http://localhost:3000/?lang=arabic">
+  <link rel="alternate" hreflang="ja" href="http://localhost:3000/?lang=japanese">
+  <link rel="alternate" hreflang="ko" href="http://localhost:3000/?lang=korean">
+  <link rel="alternate" hreflang="zh" href="http://localhost:3000/?lang=chinese">
+  <link rel="alternate" hreflang="ru" href="http://localhost:3000/?lang=russian">
+  <link rel="alternate" hreflang="x-default" href="http://localhost:3000/">
+  
+  <!-- DNS Prefetch for external resources -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
 </head>
 <body>
   <div class="app">
     <aside class="sidebar">
       <div class="sidebar-header">
-        <h1>MyGPT</h1>
-        <div class="subtitle">AI Assistant</div>
+        <h1>ChatBuddy</h1>
+        <div class="subtitle">Free AI Chat Assistant</div>
       </div>
       <button id="newChatBtn" class="btn-new">+ Naya Chat</button>
       <div class="chat-list" id="chatList">
