@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyGPT - AI Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Sans+Arabic&family=Noto+Sans+Bengali&family=Noto+Sans+Devanagari&family=Noto+Sans+Gujarati&family=Noto+Sans+Gurmukhi&family=Noto+Sans+Kannada&family=Noto+Sans+Malayalam&family=Noto+Sans+Oriya&family=Noto+Sans+Tamil&family=Noto+Sans+Telugu&family=Noto+Sans+Thaana&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>MyGPT</h1>
+        <div class="subtitle">AI Assistant</div>
+      </div>
+      <button id="newChatBtn" class="btn-new">+ Naya Chat</button>
+      <div class="chat-list" id="chatList">
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="header">
+        <div class="selector-group">
+          <div class="model-selector">
+            <label for="modelSelect">Model:</label>
+            <select id="modelSelect">
+              <option value="groq">Groq (llama-3.3-70b-versatile)</option>
+              <option value="gemini">Google Gemini (gemini-1.5-flash)</option>
+            </select>
+          </div>
+          <div class="language-selector">
+            <label for="languageSelect">Language:</label>
+            <select id="languageSelect">
+              <option value="Auto">Auto</option>
+              <option value="Hindi">Hindi</option>
+              <option value="Hinglish">Hinglish</option>
+              <option value="English">English</option>
+              <option value="Punjabi">Punjabi</option>
+              <option value="Bengali">Bengali</option>
+              <option value="Marathi">Marathi</option>
+              <option value="Gujarati">Gujarati</option>
+              <option value="Tamil">Tamil</option>
+              <option value="Telugu">Telugu</option>
+              <option value="Kannada">Kannada</option>
+              <option value="Malayalam">Malayalam</option>
+              <option value="Urdu">Urdu</option>
+              <option value="Spanish">Spanish</option>
+              <option value="French">French</option>
+              <option value="German">German</option>
+              <option value="Arabic">Arabic</option>
+              <option value="Japanese">Japanese</option>
+              <option value="Korean">Korean</option>
+              <option value="Chinese">Chinese</option>
+              <option value="Russian">Russian</option>
+            </select>
+          </div>
+          <div class="language-display" id="languageDisplay">Language: Auto</div>
+        </div>
+      </header>
+
+      <div class="chat-window">
+        <div class="empty-state" id="emptyState">
+          <p>Koi sawal pucho...</p>
+        </div>
+        <div class="messages" id="messages"></div>
+      </div>
+
+      <div class="input-area">
+        <div class="typing" id="typing">AI likh raha hai<span class="dots">...</span></div>
+        <form id="chatForm">
+          <textarea id="messageInput" placeholder="Aapka sawal..." rows="1"></textarea>
+          <button type="submit" id="sendBtn">Bhejein</button>
+        </form>
+      </div>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
