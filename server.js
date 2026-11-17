@@ -86,6 +86,12 @@ app.get('/site.webmanifest', (req, res) => {
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
+// Debug: Log env var presence (not values) at module load
+console.log('[DEBUG] Module loaded');
+console.log('[DEBUG] GROQ_API_KEY present:', !!process.env.GROQ_API_KEY);
+console.log('[DEBUG] GEMINI_API_KEY present:', !!process.env.GEMINI_API_KEY);
+console.log('[DEBUG] VERCEL:', process.env.VERCEL);
+
 const BASE_SYSTEM_PROMPT = "Tum ek helpful AI assistant ho. Abhi ki language: {language}. Agar language 'Auto' hai to user jis language me likhe usi me jawab do. Warna sirf {language} me jawab do, chahe user kisi bhi language me likhe.";
 
 function buildSystemPrompt(language = 'Auto') {
