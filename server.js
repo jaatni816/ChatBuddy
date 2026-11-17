@@ -132,10 +132,11 @@ app.post('/api/chat/groq', async (req, res) => {
     res.end();
   } catch (err) {
     console.error('Groq error:', err);
+    const errorMsg = err?.message || err?.error?.message || 'Groq se jawab milne mein error aaya. Kripya dobara koshish karein.';
     if (!res.headersSent) {
-      return res.status(500).json({ error: 'Groq se jawab milne mein error aaya. Kripya dobara koshish karein.' });
+      return res.status(500).json({ error: errorMsg });
     }
-    res.write(`data: ${JSON.stringify({ error: 'Groq se jawab milne mein error aaya.' })}\n\n`);
+    res.write(`data: ${JSON.stringify({ error: errorMsg })}\n\n`);
     res.end();
   }
 });
@@ -173,10 +174,11 @@ app.post('/api/chat/gemini', async (req, res) => {
     res.end();
   } catch (err) {
     console.error('Gemini error:', err);
+    const errorMsg = err?.message || err?.error?.message || 'Gemini se jawab milne mein error aaya. Kripya dobara koshish karein.';
     if (!res.headersSent) {
-      return res.status(500).json({ error: 'Gemini se jawab milne mein error aaya. Kripya dobara koshish karein.' });
+      return res.status(500).json({ error: errorMsg });
     }
-    res.write(`data: ${JSON.stringify({ error: 'Gemini se jawab milne mein error aaya.' })}\n\n`);
+    res.write(`data: ${JSON.stringify({ error: errorMsg })}\n\n`);
     res.end();
   }
 });
