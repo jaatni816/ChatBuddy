@@ -8,6 +8,7 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DOMAIN = process.env.DOMAIN || `http://localhost:${PORT}`;
+const IS_VERCEL = process.env.VERCEL === '1';
 
 // Security headers middleware
 app.use((req, res, next) => {
@@ -33,8 +34,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// Compression for better performance
-app.use(compression());
+// Compression for better performance (skip for streaming routes)
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api/chat/')) {
+    return next();
+  }
+  compression()(req, res, next);
+});
 
 // CORS and JSON parsing
 app.use(cors());
@@ -86,6 +92,15 @@ function buildSystemPrompt(language = 'Auto') {
   return BASE_SYSTEM_PROMPT.replace('{language}', language);
 }
 
+// Streaming headers helper
+function setStreamingHeaders(res) {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache, no-transform');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no');
+  res.flushHeaders();
+}
+
 app.post('/api/chat/groq', async (req, res) => {
   try {
     const { messages, language = 'Auto' } = req.body;
@@ -93,9 +108,7 @@ app.post('/api/chat/groq', async (req, res) => {
       return res.status(400).json({ error: 'messages array required' });
     }
 
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
+    setStreamingHeaders(res);
 
     const stream = await groq.chat.completions.create({
       model: 'llama-3.3-70b-versatile',
@@ -128,9 +141,7 @@ app.post('/api/chat/gemini', async (req, res) => {
       return res.status(400).json({ error: 'messages array required' });
     }
 
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
+    setStreamingHeaders(res);
 
     const model = genAI.getGenerativeModel({
       model: 'gemini-1.5-flash',
@@ -164,7 +175,13 @@ app.post('/api/chat/gemini', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on ${DOMAIN}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-});
+// Only start server locally, not on Vercel
+if (!IS_VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server running on ${DOMAIN}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  });
+}
+
+// Export for Vercel
+module.exports = app;
