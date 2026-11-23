@@ -56,8 +56,8 @@ function App() {
 
   const addMessage = (message, chatId) => {
     const newMessage = {
-      id: Date.now().toString() + '-' + Math.random().toString(36).slice(2, 7),
       ...message,
+      id: message.id || (Date.now().toString() + '-' + Math.random().toString(36).slice(2, 7)),
       timestamp: new Date().toISOString()
     };
     setMessages(prev => [...prev, newMessage]);
