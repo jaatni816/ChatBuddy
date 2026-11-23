@@ -35,7 +35,6 @@ const TOAST_DURATION = 3500;
 
 const InputCard = ({ onSendMessage, onOpenVoiceMode }) => {
   const [input, setInput] = useState('');
-  const [mode, setMode] = useState('Chat');
   const [isListening, setIsListening] = useState(false);
   const [interimText, setInterimText] = useState('');
   const [images, setImages] = useState([]);
@@ -422,34 +421,9 @@ const InputCard = ({ onSendMessage, onOpenVoiceMode }) => {
               onChange={handleFileSelect}
               className="hidden"
             />
-
-            <div className="flex items-center bg-input-bg rounded-lg p-1">
-              <button
-                type="button"
-                onClick={() => setMode('Chat')}
-                className={`px-3 py-1 rounded-md text-[14px] transition-colors ${
-                  mode === 'Chat' ? 'bg-white shadow-sm' : ''
-                }`}
-              >
-                Chat
-              </button>
-              <button
-                type="button"
-                onClick={() => setMode('Cowork')}
-                className={`px-3 py-1 rounded-md text-[14px] transition-colors ${
-                  mode === 'Cowork' ? 'bg-white shadow-sm' : ''
-                }`}
-              >
-                Cowork
-              </button>
-            </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="text-[14px] text-muted">
-              Groq <span className="ml-1">Fast</span>
-            </div>
-
             <button
               type="button"
               onClick={handleMicClick}

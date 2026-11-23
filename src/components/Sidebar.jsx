@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Search, Folder, Package, Code, Plug, ChevronDown, SlidersHorizontal, Monitor, X } from 'lucide-react';
+import { Plus, Search, ChevronDown, SlidersHorizontal, Monitor, X } from 'lucide-react';
 
 // Orange asterisk SVG logo
 const AsteriskLogo = ({ size = 36 }) => (
@@ -85,10 +85,6 @@ const Sidebar = ({ chats, currentChatId, onCreateNew, onSelectChat, onDeleteChat
       <div className="px-3 space-y-1">
         <NavItem icon={Plus} label="New" isActive={true} onClick={onCreateNew} />
         <NavItem icon={Search} label="Search" onClick={() => {}} />
-        <NavItem icon={Folder} label="Projects" onClick={() => {}} />
-        <NavItem icon={Package} label="Artifacts" onClick={() => {}} />
-        <NavItem icon={Code} label="Code" badge="Upgrade" onClick={() => {}} />
-        <NavItem icon={Plug} label="Plugins" onClick={() => {}} />
       </div>
 
       {/* Chats and tasks section */}
