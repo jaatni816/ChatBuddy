@@ -510,10 +510,8 @@ const MainArea = ({ messages, isTyping, onSendMessage, onOpenVoiceMode, onOpenSi
             <InputCard onSendMessage={onSendMessage} onOpenVoiceMode={onOpenVoiceMode} />
           </div>
         ) : (
-          <div className="w-full max-w-[650px] flex-1 flex flex-col">
-            <div className="flex-1 overflow-y-auto scrollbar-thin mb-4">
-              <MessageList messages={messages} isTyping={isTyping} />
-            </div>
+          <div className="w-full max-w-[650px] flex-1 flex flex-col min-h-0">
+            <MessageList messages={messages} isTyping={isTyping} />
 
             <InputCard onSendMessage={onSendMessage} onOpenVoiceMode={onOpenVoiceMode} />
           </div>
