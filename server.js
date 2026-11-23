@@ -2,13 +2,44 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const compression = require('compression');
+const multer = require('multer');
+const rateLimit = require('express-rate-limit');
 const { Groq } = require('groq-sdk');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DOMAIN = process.env.DOMAIN || `http://localhost:${PORT}`;
 const IS_VERCEL = process.env.VERCEL === '1';
+
+const TEXT_MODEL = process.env.TEXT_MODEL || 'llama-3.2-11b-preview';
+const VISION_MODEL = process.env.VISION_MODEL || 'meta-llama/llama-4-scout-17b-16e-instruct';
+
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
+console.log('[DEBUG] Module loaded');
+console.log('[DEBUG] GROQ_API_KEY present:', !!process.env.GROQ_API_KEY);
+console.log('[DEBUG] VERCEL:', process.env.VERCEL);
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 60,
+  message: { error: 'Too many requests, please try again later.' }
+});
+
+// Multer setup for audio transcription
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const allowed = ['audio/webm', 'audio/ogg', 'audio/wav', 'audio/mp4', 'audio/mpeg'];
+    if (allowed.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid audio format. Use webm, ogg, wav, mp4, or mp3.'));
+    }
+  }
+});
 
 // Security headers middleware
 app.use((req, res, next) => {
@@ -16,89 +47,71 @@ app.use((req, res, next) => {
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
-  
-  // CSP for inline scripts/styles needed by the app
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(self), geolocation=()');
+
   res.setHeader('Content-Security-Policy', [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
-    "img-src 'self' data: https:",
-    "connect-src 'self' https://api.groq.com https://generativelanguage.googleapis.com",
+    "img-src 'self' data: blob: https:",
+    "connect-src 'self' https://api.groq.com ws://localhost:*",
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'"
   ].join('; '));
-  
+
   next();
 });
 
-// Compression for better performance (skip for streaming routes)
+app.use(limiter);
+app.use(cors());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+// Compression (skip for streaming routes)
 app.use((req, res, next) => {
-  if (req.path.startsWith('/api/chat/')) {
+  if (req.path.startsWith('/api/chat/') || req.path === '/api/transcribe') {
     return next();
   }
   compression()(req, res, next);
 });
 
-// CORS and JSON parsing
-app.use(cors());
-app.use(express.json());
-
-// Static files with cache headers
-app.use(express.static('public', {
+// Static files
+app.use(express.static('dist', {
   maxAge: '1y',
   etag: true,
   lastModified: true,
   setHeaders: (res, path) => {
-    // Cache HTML files for shorter time
     if (path.endsWith('.html')) {
       res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     }
-    // Cache manifest and robots.txt
     if (path.endsWith('.webmanifest') || path.endsWith('robots.txt') || path.endsWith('sitemap.xml')) {
-      res.setHeader('Cache-Control', 'public, max-age=86400'); // 1 day
+      res.setHeader('Cache-Control', 'public, max-age=86400');
     }
-    // SVG favicons and OG image
     if (path.endsWith('.svg')) {
       res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     }
   }
 }));
 
-// Specific routes for SEO files with correct content types
 app.get('/sitemap.xml', (req, res) => {
   res.setHeader('Content-Type', 'application/xml');
-  res.sendFile('sitemap.xml', { root: 'public' });
+  res.sendFile('sitemap.xml', { root: 'dist' });
 });
 
 app.get('/robots.txt', (req, res) => {
   res.setHeader('Content-Type', 'text/plain');
-  res.sendFile('robots.txt', { root: 'public' });
+  res.sendFile('robots.txt', { root: 'dist' });
 });
 
 app.get('/site.webmanifest', (req, res) => {
   res.setHeader('Content-Type', 'application/manifest+json');
-  res.sendFile('site.webmanifest', { root: 'public' });
+  res.sendFile('site.webmanifest', { root: 'dist' });
 });
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const SYSTEM_PROMPT = "You are a friendly voice assistant. Reply in the same language the user speaks (Hindi, English or Hinglish). Keep answers short and conversational because they will be spoken aloud. When an image is provided, carefully read all visible text and describe what matters. Never invent text that is not visible in the image; say if something is unclear.";
 
-// Debug: Log env var presence (not values) at module load
-console.log('[DEBUG] Module loaded');
-console.log('[DEBUG] GROQ_API_KEY present:', !!process.env.GROQ_API_KEY);
-console.log('[DEBUG] GEMINI_API_KEY present:', !!process.env.GEMINI_API_KEY);
-console.log('[DEBUG] VERCEL:', process.env.VERCEL);
-
-const BASE_SYSTEM_PROMPT = "Tum ek helpful AI assistant ho. Abhi ki language: {language}. Agar language 'Auto' hai to user jis language me likhe usi me jawab do. Warna sirf {language} me jawab do, chahe user kisi bhi language me likhe.";
-
-function buildSystemPrompt(language = 'Auto') {
-  return BASE_SYSTEM_PROMPT.replace('{language}', language);
-}
-
-// Streaming headers helper
 function setStreamingHeaders(res) {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache, no-transform');
@@ -107,6 +120,86 @@ function setStreamingHeaders(res) {
   res.flushHeaders();
 }
 
+// Audio transcription endpoint
+app.post('/api/transcribe', upload.single('audio'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No audio file provided' });
+    }
+
+    const transcription = await groq.audio.transcriptions.create({
+      file: req.file.buffer,
+      model: 'whisper-large-v3-turbo',
+      language: req.body.language || undefined,
+    });
+
+    res.json({ text: transcription.text || '' });
+  } catch (err) {
+    console.error('Transcription error:', err);
+    res.status(500).json({ error: 'Transcription failed: ' + (err?.message || 'Unknown error') });
+  }
+});
+
+// Chat endpoint (text + vision)
+app.post('/api/chat', async (req, res) => {
+  try {
+    const { messages, images } = req.body;
+
+    if (!messages || !Array.isArray(messages)) {
+      return res.status(400).json({ error: 'messages array required' });
+    }
+
+    setStreamingHeaders(res);
+
+    const hasImages = images && Array.isArray(images) && images.length > 0;
+    const model = hasImages ? VISION_MODEL : TEXT_MODEL;
+
+    let apiMessages = [{ role: 'system', content: SYSTEM_PROMPT }];
+
+    for (const msg of messages) {
+      if (msg.role === 'user' && hasImages && msg === messages[messages.length - 1]) {
+        const contentParts = [{ type: 'text', text: msg.content || 'Describe this image and read any text in it.' }];
+        for (const img of images) {
+          contentParts.push({
+            type: 'image_url',
+            image_url: { url: img }
+          });
+        }
+        apiMessages.push({ role: 'user', content: contentParts });
+      } else {
+        apiMessages.push({
+          role: msg.role,
+          content: msg.content || ''
+        });
+      }
+    }
+
+    const stream = await groq.chat.completions.create({
+      model,
+      messages: apiMessages,
+      stream: true,
+    });
+
+    for await (const chunk of stream) {
+      const content = chunk.choices[0]?.delta?.content || '';
+      if (content) {
+        res.write(`data: ${JSON.stringify({ content })}\n\n`);
+      }
+    }
+    res.write('data: [DONE]\n\n');
+    res.end();
+  } catch (err) {
+    console.error('Chat error:', err);
+    const errorMsg = err?.message || err?.error?.message || 'Error processing request.';
+    if (!res.headersSent) {
+      return res.status(500).json({ error: errorMsg });
+    }
+    res.write(`data: ${JSON.stringify({ error: errorMsg })}\n\n`);
+    res.end();
+  }
+});
+
+// Legacy Groq endpoint (keep for backward compat)
 app.post('/api/chat/groq', async (req, res) => {
   try {
     const { messages, language = 'Auto' } = req.body;
@@ -117,8 +210,8 @@ app.post('/api/chat/groq', async (req, res) => {
     setStreamingHeaders(res);
 
     const stream = await groq.chat.completions.create({
-      model: 'llama-3.2-11b-preview',
-      messages: [{ role: 'system', content: buildSystemPrompt(language) }, ...messages],
+      model: TEXT_MODEL,
+      messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
       stream: true,
     });
 
@@ -132,7 +225,7 @@ app.post('/api/chat/groq', async (req, res) => {
     res.end();
   } catch (err) {
     console.error('Groq error:', err);
-    const errorMsg = err?.message || err?.error?.message || 'Groq se jawab milne mein error aaya. Kripya dobara koshish karein.';
+    const errorMsg = err?.message || err?.error?.message || 'Error processing request.';
     if (!res.headersSent) {
       return res.status(500).json({ error: errorMsg });
     }
@@ -141,49 +234,18 @@ app.post('/api/chat/groq', async (req, res) => {
   }
 });
 
-app.post('/api/chat/gemini', async (req, res) => {
-  try {
-    const { messages, language = 'Auto' } = req.body;
-    if (!messages || !Array.isArray(messages)) {
-      return res.status(400).json({ error: 'messages array required' });
-    }
-
-    setStreamingHeaders(res);
-
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
-      systemInstruction: buildSystemPrompt(language)
-    });
-
-    const geminiHistory = messages.map(m => ({
-      role: m.role === 'user' ? 'user' : 'model',
-      parts: [{ text: m.content }]
-    }));
-
-    const result = await model.generateContentStream({
-      contents: geminiHistory
-    });
-
-    for await (const chunk of result.stream) {
-      const text = chunk.text();
-      if (text) {
-        res.write(`data: ${JSON.stringify({ content: text })}\n\n`);
-      }
-    }
-    res.write('data: [DONE]\n\n');
-    res.end();
-  } catch (err) {
-    console.error('Gemini error:', err);
-    const errorMsg = err?.message || err?.error?.message || 'Gemini se jawab milne mein error aaya. Kripya dobara koshish karein.';
-    if (!res.headersSent) {
-      return res.status(500).json({ error: errorMsg });
-    }
-    res.write(`data: ${JSON.stringify({ error: errorMsg })}\n\n`);
-    res.end();
+// Error handling middleware
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    return res.status(400).json({ error: err.message });
   }
+  if (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+  next();
 });
 
-// Only start server locally, not on Vercel
 if (!IS_VERCEL) {
   app.listen(PORT, () => {
     console.log(`Server running on ${DOMAIN}`);
@@ -191,5 +253,4 @@ if (!IS_VERCEL) {
   });
 }
 
-// Export for Vercel
 module.exports = app;
