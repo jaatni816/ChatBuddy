@@ -142,31 +142,46 @@ function App() {
 
       addMessage({ id: assistantId, role: 'assistant', content: '' }, chatId);
 
+      let buffer = '';
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
-        const chunk = decoder.decode(value);
-        const lines = chunk.split('\n');
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
 
         for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            const data = line.slice(6);
-            if (data === '[DONE]') continue;
+          const trimmed = line.trim();
+          if (!trimmed.startsWith('data:')) continue;
+          const data = trimmed.slice(5).trim();
+          if (data === '[DONE]') continue;
 
-            try {
-              const parsed = JSON.parse(data);
-              if (parsed.content) {
-                assistantMessage += parsed.content;
-                updateMessage(assistantId, assistantMessage, chatId);
-              }
-              if (parsed.error) {
-                throw new Error(parsed.error);
-              }
-            } catch (e) {
-              // Ignore parsing errors for individual chunks
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.content) {
+              assistantMessage += parsed.content;
+              updateMessage(assistantId, assistantMessage, chatId);
             }
+            if (parsed.error) {
+              throw new Error(parsed.error);
+            }
+          } catch (e) {
+            // Ignore parsing errors for individual chunks
           }
+        }
+      }
+
+      if (buffer.trim().startsWith('data:')) {
+        const data = buffer.trim().slice(5).trim();
+        if (data && data !== '[DONE]') {
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.content) {
+              assistantMessage += parsed.content;
+              updateMessage(assistantId, assistantMessage, chatId);
+            }
+          } catch (e) {}
         }
       }
     } catch (error) {
