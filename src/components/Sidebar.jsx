@@ -56,6 +56,14 @@ const ChatHistoryItem = ({ title, isActive, onClick, onDelete }) => {
 
 const Sidebar = ({ chats, currentChatId, onCreateNew, onSelectChat, onDeleteChat, onClose }) => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredChats = chats.filter(chat => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    if (chat.title?.toLowerCase().includes(query)) return true;
+    return (chat.messages || []).some((m) => m.content?.toLowerCase().includes(query));
+  });
 
   return (
     <div className="w-[288px] h-full bg-sidebar border-r border-border flex flex-col">
@@ -87,6 +95,20 @@ const Sidebar = ({ chats, currentChatId, onCreateNew, onSelectChat, onDeleteChat
         <NavItem icon={Search} label="Search" onClick={() => {}} />
       </div>
 
+      {/* Search bar */}
+      <div className="px-3 mb-3">
+        <div className="relative">
+          <Search size={16} className="absolute left-3 top-2.5 text-muted" />
+          <input
+            type="text"
+            placeholder="Search chats..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9 pr-3 py-2 text-[14px] bg-input-bg border border-border rounded-lg outline-none focus:border-accent transition-colors"
+          />
+        </div>
+      </div>
+
       {/* Chats and tasks section */}
       <div className="mt-6 flex-1 flex flex-col overflow-hidden">
         <div className="flex items-center justify-between px-3 mb-2">
@@ -104,15 +126,19 @@ const Sidebar = ({ chats, currentChatId, onCreateNew, onSelectChat, onDeleteChat
 
         {/* Chat history list */}
         <div className="flex-1 overflow-y-auto scrollbar-thin px-3 space-y-0.5">
-          {chats.map(chat => (
-            <ChatHistoryItem
-              key={chat.id}
-              title={chat.title}
-              isActive={chat.id === currentChatId}
-              onClick={() => onSelectChat(chat.id)}
-              onDelete={() => onDeleteChat(chat.id)}
-            />
-          ))}
+          {searchQuery && !filteredChats.length ? (
+            <div className="text-[13px] text-muted text-center py-4">No matching chats</div>
+          ) : (
+            filteredChats.map(chat => (
+              <ChatHistoryItem
+                key={chat.id}
+                title={chat.title}
+                isActive={chat.id === currentChatId}
+                onClick={() => onSelectChat(chat.id)}
+                onDelete={() => onDeleteChat(chat.id)}
+              />
+            ))
+          )}
         </div>
       </div>
 
