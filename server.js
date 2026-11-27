@@ -11,8 +11,8 @@ const PORT = process.env.PORT || 3000;
 const DOMAIN = process.env.DOMAIN || `http://localhost:${PORT}`;
 const IS_VERCEL = process.env.VERCEL === '1';
 
-const TEXT_MODEL = process.env.TEXT_MODEL || 'llama-3.2-11b-preview';
-const VISION_MODEL = process.env.VISION_MODEL || 'meta-llama/llama-4-scout-17b-16e-instruct';
+const TEXT_MODEL = process.env.TEXT_MODEL || 'openai/gpt-oss-20b';
+const VISION_MODEL = process.env.VISION_MODEL || 'openai/gpt-oss-120b';
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
