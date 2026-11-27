@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: chatbuddy
+    env: node
+    buildCommand: npm run build
+    startCommand: node server.js
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: TEXT_MODEL
+        value: openai/gpt-oss-20b
+      - key: VISION_MODEL
+        value: openai/gpt-oss-120b
+      - key: PORT
+        value: 10000
+      - key: DOMAIN
+        sync: false
