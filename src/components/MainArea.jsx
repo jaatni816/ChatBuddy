@@ -470,7 +470,7 @@ const MainArea = ({ messages, isTyping, onSendMessage, onOpenVoiceMode, onOpenSi
         </button>
       </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center px-4 pb-8">
+      <div className="flex-1 flex flex-col px-4 pb-8 min-h-0">
         {!hasMessages ? (
           <div className="w-full max-w-[650px]">
             <div className="flex justify-center mb-6">
