@@ -90,11 +90,11 @@ const MessageList = ({ messages, isTyping }) => {
   }, [checkIfAtBottom]);
 
   return (
-    <div className="relative flex-1 flex flex-col min-h-0">
+    <div className="relative flex-1 flex flex-col min-h-0 max-h-full">
       <div
         ref={containerRef}
         onScroll={handleScroll}
-        className="flex-1 overflow-y-auto scrollbar-thin px-1"
+        className="flex-1 overflow-y-auto scrollbar-thin px-1 max-h-full"
       >
         <div className="flex flex-col py-4">
           {messages.map((message) => (
