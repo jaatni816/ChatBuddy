@@ -484,7 +484,7 @@ const MainArea = ({ messages, isTyping, onSendMessage, onOpenVoiceMode, onOpenSi
             <InputCard onSendMessage={onSendMessage} onOpenVoiceMode={onOpenVoiceMode} />
           </div>
         ) : (
-          <div className="w-full max-w-[650px] flex-1 flex flex-col min-h-0">
+          <div className="w-full max-w-[650px] flex-1 flex flex-col min-h-0 relative">
             <MessageList messages={messages} isTyping={isTyping} />
 
             <InputCard onSendMessage={onSendMessage} onOpenVoiceMode={onOpenVoiceMode} />
